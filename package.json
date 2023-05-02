@@ -16,6 +16,10 @@
   "keywords": [
     "cli"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tuddev/create-fsd-vite.git"
+  },
   "author": "tuddev",
   "license": "ISC",
   "dependencies": {
