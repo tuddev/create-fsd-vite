@@ -2,11 +2,16 @@
   "name": "create-fsd-vite",
   "version": "1.0.0",
   "description": "",
-  "type": "commonjs",
+  "type": "module",
   "main": "bin/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "create": "create vite@latest"
+    "create": "create vite@latest",
+    "lint": "eslint ./ --ext .js",
+    "lint-fix": "run lint --fix",
+    "prettier": "prettier --write ./**/*.js",
+    "pre-commit": "lint-staged",
+    "prepare": "husky install"
   },
   "keywords": [
     "cli"
@@ -15,10 +20,26 @@
   "license": "ISC",
   "dependencies": {
     "child_process": "^1.0.2",
+    "eslint": "^8.39.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
     "fs": "^0.0.1-security",
+    "lint-staged": "^13.2.2",
+    "log-update": "^5.0.1",
     "path": "^0.12.7"
+  },
+  "lint-staged": {
+    "**/*.{js}": [
+      "npm run lint"
+    ],
+    "src/**/*.{js,md}": [
+      "prettier --write"
+    ]
   },
   "bin": {
     "create-fsd-vite": "./bin/index.js"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
   }
 }
