@@ -1,22 +1,34 @@
 #! /usr/bin/env node
 
 const fs = require('fs');
-const fse = require('fs-extra');
 const path = require('path');
 
 const rootDir = path.join(__dirname, '..');
 const outDir = path.join(process.cwd(), '.');
 const templateDir = path.join(rootDir, 'template');
 
-fs.readdir(templateDir, (err, files) => {
-  if(err) throw err; 
-  for (let file of files) {
-    const currentFile = path.join(templateDir, '..', 'template', `${file}`);
-    const toMoveDir = path.join(outDir, `${file}`);
+const EMPTY_FOLDERS_IN_SRC = ['public', 'entities', 'features', 'pages', 'widgets'];
 
-    fse.copy(currentFile, toMoveDir, err => {
-      if(err) throw err; // не удалось скопировать файл. Он уже существует?
-      console.log(`Файл ${file} успешно скопирован`);
-     })
-  }
-})
+const deleteGitKeepFiles = () => {
+  for (let folder of EMPTY_FOLDERS_IN_SRC) {
+    const deletingFileInEmptyDir = folder === 'public' 
+    ? path.join(outDir, 'public', '.gitkeep') 
+    : path.join(outDir, 'src', `${folder}`, '.gitkeep');
+  
+    fs.unlink(`${deletingFileInEmptyDir}`, err => {
+      if(err) throw err; 
+    });
+  };
+};
+
+const copyFiles = async () => {
+  await fs.promises.cp(templateDir, outDir, { recursive: true })
+}
+
+
+const init = async () => {
+  await copyFiles();
+  deleteGitKeepFiles();
+}
+
+init();
