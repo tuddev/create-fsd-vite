@@ -14,7 +14,10 @@
     "prepare": "husky install"
   },
   "keywords": [
-    "cli"
+    "cli",
+    "Vite",
+    "Feature-Sliced Design",
+    "FSD"
   ],
   "repository": {
     "type": "git",
