@@ -32,7 +32,7 @@
     "**/*.{js}": [
       "npm run lint"
     ],
-    "src/**/*.{js,md}": [
+    "**/*.{js,md}": [
       "prettier --write"
     ]
   },
