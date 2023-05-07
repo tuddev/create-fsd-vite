@@ -1,6 +1,6 @@
 {
   "name": "create-fsd-vite",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "",
   "type": "module",
   "main": "bin/index.js",
@@ -30,6 +30,7 @@
     "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-prettier": "^4.2.1",
     "fs": "^0.0.1-security",
+    "iconv-lite": "^0.6.3",
     "lint-staged": "^13.2.2",
     "log-update": "^5.0.1",
     "path": "^0.12.7"

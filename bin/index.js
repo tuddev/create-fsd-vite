@@ -10,7 +10,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const rootDir = path.join(__dirname, '..');
-const outDir = path.join(process.cwd(), '.');
 const templateDir = path.join(rootDir, 'template');
 
 const startCreateVite = async (command, callback) => {
@@ -49,8 +48,8 @@ const recursiveFindFiles = async (dirPath) =>
       )
   );
 
-const deleteGitKeepFiles = async (projectName) => {
-  const dirOut = path.join(outDir, projectName);
+const deleteGitKeepFiles = async (projectPath) => {
+  const dirOut = path.resolve(projectPath);
   let allFiles = await recursiveFindFiles(dirOut);
   allFiles = allFiles.flat(Number.POSITIVE_INFINITY);
   const GIT_KEEP_EXT = '.gitkeep';
@@ -64,13 +63,13 @@ const deleteGitKeepFiles = async (projectName) => {
   }
 };
 
-const copyFiles = async (projectName) => {
+const copyFiles = async (projectPath) => {
   try {
-    await fs.promises.cp(templateDir, path.join(outDir, projectName), {
+    await fs.promises.cp(templateDir, path.resolve(projectPath), {
       recursive: true,
     });
   } catch {
-    console.log("ERROR: can't create FSD structure");
+    console.log("ERROR: We can't create FSD structure");
   }
 };
 
@@ -78,19 +77,21 @@ const init = async () => {
   console.log('VITE + FSD structure initing process...');
 
   startCreateVite('npm create vite@latest', async (output) => {
-    const projectName = output[output.length - 1]
-      .split('\n')[0]
-      .trim()
-      .split(' ')[1];
+    const projectPath = output
+      .filter((outString) => outString.includes('Scaffolding project in'))[0]
+      ?.split('in ')[1]
+      ?.replace('...\n', '');
 
-    if (projectName) {
-      await copyFiles(projectName);
-      await deleteGitKeepFiles(projectName);
+    if (projectPath) {
+      await copyFiles(projectPath);
+      await deleteGitKeepFiles(projectPath);
+      const projectName = path.basename(projectPath);
+      console.log(
+        `SUCCESS!🥳 FSD structure was created\n\nRun cd ${projectName}\nnpm install\nnpm run dev`
+      );
     } else {
-      console.log("ERROR: can't create FSD structure");
+      console.log("ERROR: We can't create FSD structure");
     }
-
-    console.log('SUCCESS!🥳 FSD structure was created');
   });
 };
 
